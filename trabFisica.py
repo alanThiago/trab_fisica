@@ -1,60 +1,80 @@
 import pygame
 import random
 
-# inicializa o Pygame
-pygame.init()
+# Define as constantes para o tamanho da tela e o tamanho das esferas
+SCREEN_SIZE = 600
+BALL_SIZE = 50
 
-# configura a janela
-SIZE = 600
-window = pygame.display.set_mode((SIZE, SIZE))
-pygame.display.set_caption('Caixa de Quiques')
+# Cria a janela do jogo
+screen = pygame.display.set_mode((SCREEN_SIZE, SCREEN_SIZE))
+pygame.display.set_caption('Simulação de Caixa de Esferas')
 
-# classe que representa uma esfera
-class BouncingBall:
-    def __init__(self, x, y, r, color):
+# Classe da esfera
+class Ball:
+    def __init__(self, x, y, dx, dy):
         self.x = x
         self.y = y
-        self.r = r
-        self.color = color
-        self.vx = random.randint(-5, 5)
-        self.vy = random.randint(-5, 5)
+        self.dx = dx
+        self.dy = dy
 
-    # desenha a esfera na tela
-    def draw(self, window):
-        pygame.draw.circle(window, self.color, (self.x, self.y), self.r)
+    def update(self):
+        self.x += self.dx
+        self.y += self.dy
 
-# cria a esfera
-ball = BouncingBall(300, 300, 20, (0, 0, 255))
+        # Verifica se a esfera colidiu com as bordas da tela
+        if self.x < BALL_SIZE or self.x > SCREEN_WIDTH - BALL_SIZE:
+            self.dx = -self.dx
+        if self.y < BALL_SIZE or self.y > SCREEN_HEIGHT - BALL_SIZE:
+            self.dy = -self.dy
 
-# loop do jogo
-running = True
-while running:
-    # verifica os eventos do jogo
+        # Verifica colisões entre as esferas
+        for ball in balls:
+            if ball != self:
+                # Calcula a distância entre as esferas
+                dx = self.x - ball.x
+                dy = self.y - ball.y
+                distance = (dx**2 + dy**2)**0.5
+
+                # Verifica se houve colisão
+                if distance <= BALL_SIZE*2:
+                    # Inverte a direção das esferas
+                    self.dx = -self.dx
+                    self.dy = -self.dy
+                    ball.dx = -ball.dx
+                    ball.dy = -ball.dy
+
+# Cria as esferas
+balls = []
+for i in range(3):
+    x = random.randint(BALL_SIZE, SCREEN_WIDTH - BALL_SIZE)
+    y = random.randint(BALL_SIZE, SCREEN_HEIGHT - BALL_SIZE)
+    dx = random.randint(-5, 5)
+    dy = random.randint(-5, 5)
+    ball = Ball(x, y, dx, dy)
+    balls.append(ball)
+
+# Inicia o relógio do jogo
+clock = pygame.time.Clock()
+
+# Executa o jogo por 1 minuto (60 segundos)
+while True:
+    # Controla a velocidade do jogo
+    clock.tick(60)
+
+    # Verifica se o jogador fechou a janela
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            pygame.quit()
+            sys.exit()
 
-    # atualiza a posição da esfera
-    ball.x += ball.vx
-    ball.y += ball.vy
+    # Atualiza a posição das esferas
+    for ball in balls:
+        ball.update()
 
-    # verifica se a esfera colidiu com as paredes da caixa
-    if ball.x-ball.r < 0 or ball.x+ball.r > SIZE:
-        ball.vx = -ball.vx
-    if ball.y-ball.r < 0 or ball.y+ball.r > SIZE:
-        ball.vy = -ball.vy
+    # Desenha as esferas na tela
+    for ball in balls:
+        pygame.draw.circle(screen, (0, 0, 255), (ball.x, ball.y), BALL_SIZE)
 
-    # limpa a tela
-    window.fill((255, 255, 255))
+    # Atualiza a tela
+    pygame.display.flip()
 
-    # desenha a esfera
-    ball.draw(window)
-
-    # desenha as paredes da caixa
-    pygame.draw.rect(window, (0, 0, 0), (0, 0, SIZE, SIZE), 2)
-
-    # atualiza a tela
-    pygame.display.update()
-
-# finaliza o Pygame
-pygame.quit()
