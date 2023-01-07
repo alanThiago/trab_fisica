@@ -22,9 +22,9 @@ class Ball:
         self.y += self.dy
 
         # Verifica se a esfera colidiu com as bordas da tela
-        if self.x < BALL_SIZE or self.x > SCREEN_WIDTH - BALL_SIZE:
+        if self.x < BALL_SIZE or self.x > SCREEN_SIZE - BALL_SIZE:
             self.dx = -self.dx
-        if self.y < BALL_SIZE or self.y > SCREEN_HEIGHT - BALL_SIZE:
+        if self.y < BALL_SIZE or self.y > SCREEN_SIZE - BALL_SIZE:
             self.dy = -self.dy
 
         # Verifica colisões entre as esferas
@@ -46,8 +46,8 @@ class Ball:
 # Cria as esferas
 balls = []
 for i in range(3):
-    x = random.randint(BALL_SIZE, SCREEN_WIDTH - BALL_SIZE)
-    y = random.randint(BALL_SIZE, SCREEN_HEIGHT - BALL_SIZE)
+    x = random.randint(BALL_SIZE, SCREEN_SIZE - BALL_SIZE)
+    y = random.randint(BALL_SIZE, SCREEN_SIZE - BALL_SIZE)
     dx = random.randint(-5, 5)
     dy = random.randint(-5, 5)
     ball = Ball(x, y, dx, dy)
