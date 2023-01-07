@@ -1,31 +1,27 @@
 import pygame
 import random
 
-# Define as constantes para o tamanho da tela e o tamanho das esferas
-SCREEN_WIDTH = 600
-SCREEN_HEIGHT = 600
-BALL_SIZE = 50
-
-# Cria a janela do jogo
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption('Simulação de Caixa de Esferas')
+# Define as constantes para o tamanho da tela
+SCREEN_SIZE = 600
 
 # Classe da esfera
 class Ball:
-    def __init__(self, x, y, dx, dy):
+    def __init__(self, x, y, dx, dy, size, color):
         self.x = x
         self.y = y
         self.dx = dx
         self.dy = dy
+        self.size = size
+        self.color = color
 
     def update(self):
         self.x += self.dx
         self.y += self.dy
 
         # Verifica se a esfera colidiu com as bordas da tela
-        if self.x < BALL_SIZE or self.x > SCREEN_WIDTH - BALL_SIZE:
+        if self.x < self.size or self.x > SCREEN_SIZE - self.size:
             self.dx = -self.dx
-        if self.y < BALL_SIZE or self.y > SCREEN_HEIGHT - BALL_SIZE:
+        if self.y < self.size or self.y > SCREEN_SIZE - self.size:
             self.dy = -self.dy
 
         # Verifica colisões entre as esferas
@@ -37,21 +33,26 @@ class Ball:
                 distance = (dx**2 + dy**2)**0.5
 
                 # Verifica se houve colisão
-                if distance <= BALL_SIZE*2:
+                if distance <= self.size + ball.size:
                     # Inverte a direção das esferas
                     self.dx = -self.dx
                     self.dy = -self.dy
                     ball.dx = -ball.dx
                     ball.dy = -ball.dy
 
+# Cria a janela do jogo
+screen = pygame.display.set_mode((SCREEN_SIZE,SCREEN_SIZE))
+
 # Cria as esferas
 balls = []
 for i in range(3):
-    x = random.randint(BALL_SIZE, SCREEN_WIDTH - BALL_SIZE)
-    y = random.randint(BALL_SIZE, SCREEN_HEIGHT - BALL_SIZE)
+    x = random.randint(0, SCREEN_SIZE)
+    y = random.randint(0, SCREEN_SIZE)
     dx = random.randint(-5, 5)
     dy = random.randint(-5, 5)
-    ball = Ball(x, y, dx, dy)
+    size = random.randint(20, 50)
+    color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+    ball = Ball(x, y, dx, dy, size, color)
     balls.append(ball)
 
 # Inicia o relógio do jogo
@@ -77,7 +78,7 @@ while True:
 
     # Desenha as esferas na tela
     for ball in balls:
-        pygame.draw.circle(screen, (0, 0, 255), (ball.x, ball.y), BALL_SIZE)
+        pygame.draw.circle(screen, ball.color, (ball.x, ball.y), ball.size)
 
     # Atualiza a tela
     pygame.display.flip()
