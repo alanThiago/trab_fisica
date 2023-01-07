@@ -15,15 +15,23 @@ class Ball:
         self.x += self.speed_x
         self.y += self.speed_y
     
-    def checkCollision(self, other):
+    def checkCollision(self, other, screenSize):
         dx = self.x - other.x
         dy = self.y - other.y
         distance = math.sqrt(dx**2 + dy**2)
         if distance < self.radius + other.radius:
-            self.speed_x = -self.speed_x
-            self.speed_y = -self.speed_y
-            other.speed_x = -other.speed_x
-            other.speed_y = -other.speed_y
+            r = (other.x - self.x, other.y - self.y)
+            rho = self.radius + other.radius
+            v = (other.speed_x - self.speed_x, other.speed_y - self.speed_y)
+
+            aux = 2*self.mass*other.mass * (v[0] * r[0] + v[1] * r[1]) / (rho * (self.mass + other.mass))
+            I = (r[0] * aux / rho, r[1] * aux / rho)
+
+            self.speed_x = self.speed_x + I[0] / self.mass
+            self.speed_y = self.speed_y + I[1] / self.mass
+
+            other.speed_x = other.speed_x - I[0] / other.mass
+            other.speed_y = other.speed_y - I[1] / other.mass
     
     def checkBounds(self, screenLenght):
         if self.x - self.radius <= 0 or self.x + self.radius >= screenLenght:
