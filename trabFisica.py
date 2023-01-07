@@ -2,7 +2,8 @@ import pygame
 import random
 
 # Define as constantes para o tamanho da tela
-SCREEN_SIZE = 600
+SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 600
 
 # Classe da esfera
 class Ball:
@@ -19,9 +20,9 @@ class Ball:
         self.y += self.dy
 
         # Verifica se a esfera colidiu com as bordas da tela
-        if self.x < self.size or self.x > SCREEN_SIZE - self.size:
+        if self.x < self.size or self.x > SCREEN_WIDTH - self.size:
             self.dx = -self.dx
-        if self.y < self.size or self.y > SCREEN_SIZE - self.size:
+        if self.y < self.size or self.y > SCREEN_HEIGHT - self.size:
             self.dy = -self.dy
 
         # Verifica colisões entre as esferas
@@ -41,13 +42,13 @@ class Ball:
                     ball.dy = -ball.dy
 
 # Cria a janela do jogo
-screen = pygame.display.set_mode((SCREEN_SIZE,SCREEN_SIZE))
+screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEn_HEIGHT))
 
 # Cria as esferas
 balls = []
 for i in range(3):
-    x = random.randint(0, SCREEN_SIZE)
-    y = random.randint(0, SCREEN_SIZE)
+    x = random.randint(0, SCREEN_WIDTH)
+    y = random.randint(0, SCREEN_HEIGHT)
     dx = random.randint(-5, 5)
     dy = random.randint(-5, 5)
     size = random.randint(20, 50)
