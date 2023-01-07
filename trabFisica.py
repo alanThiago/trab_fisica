@@ -17,8 +17,8 @@ class BouncingBall:
         self.y = y
         self.r = r
         self.color = color
-        self.vx = random.randint(-10, 10)
-        self.vy = random.randint(-10, 10)
+        self.vx = random.randint(-5, 5)
+        self.vy = random.randint(-5, 5)
 
     # desenha a esfera na tela
     def draw(self, window):
