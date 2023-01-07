@@ -20,7 +20,7 @@ class Simulation:
             while speed_x == 0 and speed_y == 0:
                 speed_x = rd.randint(0, 10)
                 speed_y = rd.randint(0, 10)
-            mass = rd.randint(0, 30)
+            mass = rd.randint(1, 30)
             color = self.colors[rd.randint(0, 3)]
             self.balls.append(Ball(x, y, radius, speed_x, speed_y, mass, color))
 
