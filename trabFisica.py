@@ -42,7 +42,7 @@ class Ball:
                     ball.dy = -ball.dy
 
 # Cria a janela do jogo
-screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEn_HEIGHT))
+screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
 # Cria as esferas
 balls = []
